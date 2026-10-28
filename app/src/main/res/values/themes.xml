@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MedBox" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#FF0F766E</item>
+        <item name="android:navigationBarColor">#FFF8FAF9</item>
+        <item name="android:windowBackground">#FFF8FAF9</item>
+    </style>
+</resources>

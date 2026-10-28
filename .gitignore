@@ -1,0 +1,25 @@
+# Gradle / Android 构建产物
+/build/
+/app/build/
+/.gradle/
+/.kotlin/
+/captures/
+
+# 本机路径配置（不同电脑不一样，不进仓库）
+local.properties
+
+# IDE
+/.idea/
+*.iml
+*.hprof
+
+# 打包好的 APK（走 GitHub Release 发布，不进 git）
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# 临时文件
+*.log
+.DS_Store
+Thumbs.db
