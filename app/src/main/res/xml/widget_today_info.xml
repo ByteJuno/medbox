@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  4x2 今日打卡小组件配置
+  - minWidth/minHeight 按「每格 70dp - 30dp」换算，小米桌面与 OPPO 桌面都按这个公式算格子
+  - targetCellWidth/Height（Android 12+）让 HyperOS / ColorOS 精确放到 4x2
+  - resizeMode 允许拉高，拉高后会多显示几行（代码里按 OPTION_APPWIDGET_MIN_HEIGHT 算）
+  - updatePeriodMillis 最小 30 分钟，跨天刷新另由内部闹钟保证
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_today_desc"
+    android:initialLayout="@layout/widget_today"
+    android:minHeight="110dp"
+    android:minResizeHeight="60dp"
+    android:minResizeWidth="110dp"
+    android:minWidth="250dp"
+    android:previewImage="@drawable/widget_preview_today"
+    android:previewLayout="@layout/widget_today"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellHeight="2"
+    android:targetCellWidth="4"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

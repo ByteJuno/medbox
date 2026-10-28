@@ -21,6 +21,7 @@ object Reminders {
     const val CHANNEL_ID = "medbox_reminder"
     const val ACTION_ALARM = "com.medbox.ACTION_ALARM"
     const val ACTION_TAKEN = "com.medbox.ACTION_TAKEN"
+    const val ACTION_MIDNIGHT = "com.medbox.ACTION_MIDNIGHT"
 
     private const val PREFS = "medbox_alarms"
 
@@ -84,6 +85,26 @@ object Reminders {
             }
         }
         prefs.edit().putStringSet("codes", codes).apply()
+
+        // 小组件跟着刷新，并安排跨天（0 点）刷新，保证日期/进度不会停在昨天
+        Widgets.refreshAll(context)
+        scheduleMidnightTick(context)
+    }
+
+    /** 每天 0 点过一点刷新一次小组件（跨天后"今天"要重算），并自己续排下一次 */
+    fun scheduleMidnightTick(context: Context) {
+        val am = context.getSystemService(AlarmManager::class.java) ?: return
+        val intent = Intent(context, ReminderReceiver::class.java).apply { action = ACTION_MIDNIGHT }
+        val pi = PendingIntent.getBroadcast(
+            context, 987654, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val now = ZonedDateTime.now()
+        var next = now.toLocalDate().plusDays(1).atStartOfDay(now.zone).plusSeconds(5)
+        if (!next.isAfter(now)) next = next.plusDays(1)
+        runCatching {
+            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next.toInstant().toEpochMilli(), pi)
+        }
     }
 
     /** 单个闹钟（响过之后排明天的） */
@@ -203,6 +224,10 @@ class ReminderReceiver : BroadcastReceiver() {
         Store.init(context)
         val code = intent.getIntExtra("code", 0)
         when (intent.action) {
+            Reminders.ACTION_MIDNIGHT -> {
+                Widgets.refreshAll(context)
+                Reminders.scheduleMidnightTick(context)
+            }
             Reminders.ACTION_TAKEN -> {
                 val medId = intent.getLongExtra("medId", -1L)
                 val time = intent.getStringExtra("time")

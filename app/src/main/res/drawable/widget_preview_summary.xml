@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 2x2 概要小组件预览图 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="110dp"
+    android:height="110dp"
+    android:viewportWidth="110"
+    android:viewportHeight="110">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,0 L94,0 A16,16 0 0 1 110,16 L110,94 A16,16 0 0 1 94,110 L16,110 A16,16 0 0 1 0,94 L0,16 A16,16 0 0 1 16,0 Z" />
+
+    <path android:fillColor="#99A5A2" android:pathData="M12,12 h52 v6 h-52 z" />
+    <path
+        android:fillColor="#0F766E"
+        android:pathData="M12,24 h44 v20 h-44 z" />
+    <path android:fillColor="#1F0F766E" android:pathData="M12,50 h86 v4 h-86 z" />
+    <path android:fillColor="#0F766E" android:pathData="M12,50 h54 v4 h-54 z" />
+    <path android:fillColor="#99A5A2" android:pathData="M12,62 h44 v6 h-44 z" />
+    <path android:fillColor="#CCD5D3" android:pathData="M12,74 h76 v7 h-76 z" />
+</vector>

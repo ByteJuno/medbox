@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">药盒</string>
+
+    <string name="widget_today_name">今日服药打卡</string>
+    <string name="widget_today_desc">显示今天还没吃的药，点「打卡」直接记录</string>
+    <string name="widget_summary_name">服药进度概要</string>
+    <string name="widget_summary_desc">今天吃了几次、下一次该吃什么</string>
 </resources>

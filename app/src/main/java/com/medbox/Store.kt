@@ -40,11 +40,13 @@ object Store {
         private set
 
     private var file: File? = null
+    private var appContext: Context? = null
     private var nextId = 1L
     private var loaded = false
 
     fun init(context: Context) {
         if (loaded) return
+        appContext = context.applicationContext
         file = File(context.applicationContext.filesDir, "medbox.json")
         load()
         loaded = true
@@ -194,5 +196,7 @@ object Store {
         } catch (e: Exception) {
             // 写盘失败不阻塞界面
         }
+        // 数据一变就刷新桌面小组件
+        appContext?.let { Widgets.refreshAll(it) }
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 小组件选择器里的预览图（Android 11 及以下用，12+ 会直接用 previewLayout） -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="250dp"
+    android:height="110dp"
+    android:viewportWidth="250"
+    android:viewportHeight="110">
+
+    <!-- 白色圆角卡片 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,0 L234,0 A16,16 0 0 1 250,16 L250,94 A16,16 0 0 1 234,110 L16,110 A16,16 0 0 1 0,94 L0,16 A16,16 0 0 1 16,0 Z" />
+
+    <!-- 日期 / 进度 -->
+    <path android:fillColor="#99A5A2" android:pathData="M14,11 h70 v6 h-70 z" />
+    <path android:fillColor="#0F766E" android:pathData="M206,11 h30 v6 h-30 z" />
+    <path android:fillColor="#1F0F766E" android:pathData="M14,23 h222 v4 h-222 z" />
+    <path android:fillColor="#0F766E" android:pathData="M14,23 h140 v4 h-140 z" />
+
+    <!-- 三行待服 -->
+    <path android:fillColor="#0F766E" android:pathData="M14,36 h30 v7 h-30 z" />
+    <path android:fillColor="#CCD5D3" android:pathData="M50,36 h96 v7 h-96 z" />
+    <path android:fillColor="#E0F2EF" android:pathData="M194,33 h42 v14 h-42 z" />
+
+    <path android:fillColor="#0F766E" android:pathData="M14,56 h30 v7 h-30 z" />
+    <path android:fillColor="#CCD5D3" android:pathData="M50,56 h74 v7 h-74 z" />
+    <path android:fillColor="#E0F2EF" android:pathData="M194,53 h42 v14 h-42 z" />
+
+    <path android:fillColor="#0F766E" android:pathData="M14,76 h30 v7 h-30 z" />
+    <path android:fillColor="#CCD5D3" android:pathData="M50,76 h88 v7 h-88 z" />
+    <path android:fillColor="#E0F2EF" android:pathData="M194,73 h42 v14 h-42 z" />
+</vector>

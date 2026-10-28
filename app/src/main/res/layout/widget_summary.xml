@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 杩涘害姒傝灏忕粍浠讹紙2x2锛夛細RemoteViews 鏀寔鐨勬帶浠?-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/summary_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_light"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/summary_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="10鏈?9鏃?鍛ㄥ洓"
+        android:textColor="#47514F"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/summary_big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="0/0"
+        android:textColor="#0F766E"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/summary_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="4dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/widget_progress" />
+
+    <TextView
+        android:id="@+id/summary_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="涓嬩竴娆?--:--"
+        android:textColor="#47514F"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/summary_med"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="鑽搧鍚嶇О"
+        android:textColor="#191C1B"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</LinearLayout>
+
