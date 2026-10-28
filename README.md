@@ -6,7 +6,7 @@
 
 ## 下载安装
 
-到 [**Releases**](https://github.com/ByteJuno/medbox/releases/latest) 下载 `药盒-v0.1.0.apk`，传到手机点击安装（需允许「安装未知来源应用」）。
+到 [**Releases**](https://github.com/ByteJuno/medbox/releases/latest) 下载 `medbox-v0.1.0.apk`，传到手机点击安装（需允许「安装未知来源应用」）。
 
 要求：Android 8.0（API 26）及以上。已在 Pixel 8 / Android 16 上跑通全流程。
 
