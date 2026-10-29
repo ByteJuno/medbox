@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 2x2 概要小组件预览图 -->
+<!-- 2x2 概要小组件预览图（含打卡按钮） -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="110dp"
     android:height="110dp"
@@ -10,12 +10,21 @@
         android:fillColor="#FFFFFF"
         android:pathData="M16,0 L94,0 A16,16 0 0 1 110,16 L110,94 A16,16 0 0 1 94,110 L16,110 A16,16 0 0 1 0,94 L0,16 A16,16 0 0 1 16,0 Z" />
 
-    <path android:fillColor="#99A5A2" android:pathData="M12,12 h52 v6 h-52 z" />
+    <!-- 日期 + 完成数 -->
+    <path android:fillColor="#99A5A2" android:pathData="M12,12 h44 v6 h-44 z" />
+    <path android:fillColor="#0F766E" android:pathData="M84,11 h14 v8 h-14 z" />
+
+    <!-- 进度条 -->
+    <path android:fillColor="#1F0F766E" android:pathData="M12,25 h86 v4 h-86 z" />
+    <path android:fillColor="#0F766E" android:pathData="M12,25 h48 v4 h-48 z" />
+
+    <!-- 下一次时间 + 药名 -->
+    <path android:fillColor="#0F766E" android:pathData="M12,40 h22 v8 h-22 z" />
+    <path android:fillColor="#CCD5D3" android:pathData="M12,52 h40 v6 h-40 z" />
+
+    <!-- 打卡按钮 -->
     <path
-        android:fillColor="#0F766E"
-        android:pathData="M12,24 h44 v20 h-44 z" />
-    <path android:fillColor="#1F0F766E" android:pathData="M12,50 h86 v4 h-86 z" />
-    <path android:fillColor="#0F766E" android:pathData="M12,50 h54 v4 h-54 z" />
-    <path android:fillColor="#99A5A2" android:pathData="M12,62 h44 v6 h-44 z" />
-    <path android:fillColor="#CCD5D3" android:pathData="M12,74 h76 v7 h-76 z" />
+        android:fillColor="#E0F2EF"
+        android:pathData="M72,38 L94,38 A5,5 0 0 1 98,42 L98,52 A5,5 0 0 1 94,56 L72,56 A5,5 0 0 1 68,52 L68,42 A5,5 0 0 1 72,38 Z" />
+    <path android:fillColor="#0F766E" android:pathData="M74,44 h18 v6 h-18 z" />
 </vector>

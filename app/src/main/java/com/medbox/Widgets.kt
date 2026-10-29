@@ -3,6 +3,7 @@ package com.medbox
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -107,7 +108,10 @@ object Widgets {
                 rv.setTextViewText(btnIds[i], "打卡")
                 rv.setTextColor(btnIds[i], p.btnText)
                 rv.setInt(btnIds[i], "setBackgroundResource", p.btnBg)
-                rv.setOnClickPendingIntent(btnIds[i], takenPending(context, widgetId, item, i))
+                rv.setOnClickPendingIntent(
+                    btnIds[i],
+                    takenPending(context, TodayWidgetProvider::class.java, widgetId, item, i)
+                )
             } else {
                 rv.setViewVisibility(rowIds[i], View.GONE)
             }
@@ -165,36 +169,59 @@ object Widgets {
         val next = nextUpcoming(pending)
 
         rv.setInt(R.id.summary_root, "setBackgroundResource", p.cardBg)
-        rv.setTextColor(R.id.summary_title, p.title)
-        rv.setTextColor(R.id.summary_big, p.primary)
-        rv.setTextColor(R.id.summary_next, p.sub)
-        rv.setTextColor(R.id.summary_med, p.title)
 
         rv.setTextViewText(R.id.summary_title, LocalDate.now().format(WIDGET_DATE_FMT))
-        rv.setTextViewText(R.id.summary_big, if (all.isEmpty()) "—" else "$done/${all.size}")
+        rv.setTextColor(R.id.summary_title, p.sub)
+        rv.setTextViewText(R.id.summary_count, if (all.isEmpty()) "—" else "$done/${all.size}")
+        rv.setTextColor(R.id.summary_count, p.primary)
         rv.setProgressBar(R.id.summary_progress, maxOf(all.size, 1), done, false)
 
-        when {
-            all.isEmpty() -> {
-                rv.setTextViewText(R.id.summary_next, "还没有添加药品")
-                rv.setTextViewText(R.id.summary_med, "点这里开始")
-            }
-            pending.isEmpty() -> {
-                rv.setTextViewText(R.id.summary_next, "今天已完成")
-                rv.setTextViewText(R.id.summary_med, "全部 $done 次都吃完了 ✓")
-            }
-            else -> {
-                rv.setTextViewText(R.id.summary_next, "下一次 ${next?.time ?: "--:--"}")
-                rv.setTextViewText(
-                    R.id.summary_med,
-                    listOfNotNull(next?.name, next?.dosage?.takeIf { it.isNotBlank() }).joinToString(" · ")
-                )
+        if (next != null) {
+            // 有下一次：时间 + 药名 + 打卡按钮
+            rv.setViewVisibility(R.id.summary_next_time, View.VISIBLE)
+            rv.setTextViewText(R.id.summary_next_time, next.time)
+            rv.setTextColor(R.id.summary_next_time, p.primary)
+            rv.setTextViewText(R.id.summary_med, doseLabel(next))
+            rv.setTextColor(R.id.summary_med, p.title)
+
+            rv.setViewVisibility(R.id.summary_btn, View.VISIBLE)
+            rv.setTextViewText(R.id.summary_btn, "打卡")
+            rv.setTextColor(R.id.summary_btn, p.btnText)
+            rv.setInt(R.id.summary_btn, "setBackgroundResource", p.btnBg)
+            rv.setOnClickPendingIntent(
+                R.id.summary_btn,
+                takenPending(context, SummaryWidgetProvider::class.java, widgetId, next, 0)
+            )
+            rv.setViewVisibility(R.id.summary_empty, View.GONE)
+        } else {
+            rv.setViewVisibility(R.id.summary_btn, View.GONE)
+            rv.setViewVisibility(R.id.summary_next_time, View.GONE)
+            if (all.isEmpty()) {
+                rv.setTextViewText(R.id.summary_med, "还没有添加药品")
+                rv.setTextColor(R.id.summary_med, p.sub)
+                rv.setViewVisibility(R.id.summary_empty, View.VISIBLE)
+                rv.setTextViewText(R.id.summary_empty, "点这里去添加")
+                rv.setTextColor(R.id.summary_empty, p.sub)
+            } else {
+                rv.setTextViewText(R.id.summary_med, "今天的药都吃完了 ✓")
+                rv.setTextColor(R.id.summary_med, p.primary)
+                rv.setViewVisibility(R.id.summary_empty, View.GONE)
             }
         }
 
-        rv.setOnClickPendingIntent(R.id.summary_root, openPending(context, widgetId))
+        // 打开 App 的热区，避开打卡按钮
+        val open = openPending(context, widgetId)
+        rv.setOnClickPendingIntent(R.id.summary_title, open)
+        rv.setOnClickPendingIntent(R.id.summary_count, open)
+        rv.setOnClickPendingIntent(R.id.summary_med, open)
+        rv.setOnClickPendingIntent(R.id.summary_next_time, open)
+        rv.setOnClickPendingIntent(R.id.summary_progress, open)
+        rv.setOnClickPendingIntent(R.id.summary_empty, open)
         mgr.updateAppWidget(widgetId, rv)
     }
+
+    private fun doseLabel(item: WidgetItem): String =
+        listOfNotNull(item.name, item.dosage.takeIf { it.isNotBlank() }).joinToString(" · ")
 
     private fun nextUpcoming(pending: List<WidgetItem>): WidgetItem? {
         if (pending.isEmpty()) return null
@@ -220,20 +247,41 @@ object Widgets {
         }
     }
 
-    private fun takenPending(context: Context, widgetId: Int, item: WidgetItem, index: Int): PendingIntent {
-        val intent = Intent(context, TodayWidgetProvider::class.java).apply {
+    private fun takenPending(
+        context: Context,
+        component: Class<out BroadcastReceiver>,
+        widgetId: Int,
+        item: WidgetItem,
+        slot: Int
+    ): PendingIntent {
+        val intent = Intent(context, component).apply {
             action = ACTION_TAKEN
             // data 不同才能保证每个按钮的 PendingIntent 互不覆盖
-            data = Uri.parse("medbox://taken/$widgetId/$index")
+            data = Uri.parse("medbox://taken/$widgetId/$slot")
             putExtra("medId", item.medId)
             putExtra("time", item.time)
         }
         return PendingIntent.getBroadcast(
             context,
-            widgetId * 100 + index,
+            widgetId * 100 + slot,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+    }
+
+    /** 小组件里点「打卡」后的统一处理 */
+    fun handleTaken(context: Context, intent: Intent) {
+        Store.init(context)
+        val medId = intent.getLongExtra("medId", -1L)
+        val time = intent.getStringExtra("time")
+        if (medId > 0 && time != null) {
+            Store.mark(medId, Store.today(), time, Store.TAKEN)
+            // 顺手把这次的时间点对应通知消掉
+            val med = Store.meds.firstOrNull { it.id == medId }
+            val index = med?.times?.indexOf(time) ?: -1
+            if (index >= 0) Reminders.cancel(context, Reminders.codeOf(medId, index))
+        }
+        refreshAll(context)
     }
 
     private fun openPending(context: Context, requestCode: Int): PendingIntent {
@@ -269,24 +317,14 @@ class TodayWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Widgets.ACTION_TAKEN) {
-            Store.init(context)
-            val medId = intent.getLongExtra("medId", -1L)
-            val time = intent.getStringExtra("time")
-            if (medId > 0 && time != null) {
-                Store.mark(medId, Store.today(), time, Store.TAKEN)
-                // 顺手把这次的时间点对应通知消掉
-                val med = Store.meds.firstOrNull { it.id == medId }
-                val index = med?.times?.indexOf(time) ?: -1
-                if (index >= 0) Reminders.cancel(context, Reminders.codeOf(medId, index))
-            }
-            Widgets.refreshAll(context)
+            Widgets.handleTaken(context, intent)
             return
         }
         super.onReceive(context, intent)
     }
 }
 
-/** 2x2 进度概要小组件 */
+/** 2x2 概要 + 下一次打卡小组件 */
 class SummaryWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         appWidgetIds.forEach { Widgets.updateSummary(context, appWidgetManager, it) }
@@ -299,5 +337,13 @@ class SummaryWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle
     ) {
         Widgets.updateSummary(context, appWidgetManager, appWidgetId)
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Widgets.ACTION_TAKEN) {
+            Widgets.handleTaken(context, intent)
+            return
+        }
+        super.onReceive(context, intent)
     }
 }

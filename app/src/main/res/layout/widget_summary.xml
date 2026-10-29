@@ -1,64 +1,113 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- 杩涘害姒傝灏忕粍浠讹紙2x2锛夛細RemoteViews 鏀寔鐨勬帶浠?-->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2x2 小组件：下一次服药 + 直接打卡
+  只使用 RemoteViews 支持的控件（LinearLayout / TextView / ProgressBar）。
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/summary_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg_light"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="12dp">
 
-    <TextView
-        android:id="@+id/summary_title"
+    <!-- 日期 + 完成数 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="10鏈?9鏃?鍛ㄥ洓"
-        android:textColor="#47514F"
-        android:textSize="12sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/summary_big"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="0/0"
-        android:textColor="#0F766E"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/summary_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="10月29日 周四"
+            android:textColor="#47514F"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/summary_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:textColor="#0F766E"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/summary_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:max="100"
         android:progress="0"
         android:progressDrawable="@drawable/widget_progress" />
 
-    <TextView
-        android:id="@+id/summary_next"
+    <!-- 下一次服药 + 打卡 -->
+    <LinearLayout
+        android:id="@+id/summary_next_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/summary_next_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--:--"
+                android:textColor="#0F766E"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/summary_med"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="下一次服药"
+                android:textColor="#191C1B"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/summary_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/widget_btn_light"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:text="打卡"
+            android:textColor="#0F766E"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/summary_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="涓嬩竴娆?--:--"
+        android:text=""
         android:textColor="#47514F"
-        android:textSize="11sp" />
-
-    <TextView
-        android:id="@+id/summary_med"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="鑽搧鍚嶇О"
-        android:textColor="#191C1B"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textSize="11sp"
+        android:visibility="gone" />
 </LinearLayout>
-
